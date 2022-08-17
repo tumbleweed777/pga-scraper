@@ -1,0 +1,16 @@
+/play/AK/anchor-point
+/play/AK/anchorage
+/play/AK/eagle-river
+/play/AK/fairbanks
+/play/AK/fort-richardson
+/play/AK/ft-wainwright
+/play/AK/gustavus
+/play/AK/haines
+/play/AK/healy
+/play/AK/juneau
+/play/AK/kenai
+/play/AK/kodiak
+/play/AK/palmer
+/play/AK/soldotna
+/play/AK/wasilla
+/play/AK/wrangell
