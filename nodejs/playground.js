@@ -1,5 +1,3 @@
-path = "/play/AL";
+const path = require("path");
 
-stateAbrreviation = path.split("/")[2];
-
-console.log(stateAbrreviation);
+console.log(path.resolve("tmp", "stateUrlPaths.txt"));
