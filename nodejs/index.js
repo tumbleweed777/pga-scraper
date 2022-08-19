@@ -180,6 +180,7 @@ async function start() {
 
   // paths = golfCoursesWithPgaProfessionalsUrlPaths.slice(3249);
   // console.log();
+<<<<<<< HEAD
   // await page.goto("https://directory.pga.org/member/detail/152078714");
 
   // const contactInfo = await page.evaluate(() => {
@@ -191,6 +192,13 @@ async function start() {
   //     return x.getAttribute("href");
   //   });
   // });
+=======
+  await page.goto("https://directory.pga.org/member/detail/689184262");
+
+  const contactInfo = await page.evaluate(() => {
+    return document.querySelector("h1").textContent;
+  });
+>>>>>>> afb7db540e48d504a73329aea7275d44ff2ec7ac
 
   // console.log(contactInfo);
 
