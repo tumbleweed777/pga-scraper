@@ -67,24 +67,75 @@ async function start() {
   //   x++;
   // }
 
-  // const data = await fs.readFile(
-  //   path.join(__dirname, "allGolfCourseUrlPaths.txt"),
-  //   "utf8"
-  // );
+  const data = await fs.readFile(
+    path.join(__dirname, "allGolfCourseUrlPaths.txt"),
+    "utf8"
+  );
 
-  // const allGolfCourseUrlPaths = data.split("\r\n");
+  const allGolfCourseUrlPaths = data.split("\r\n");
 
-  // paths = allGolfCourseUrlPaths.slice(7081);
+  paths = allGolfCourseUrlPaths.slice(12994);
 
-  // console.log(allGolfCourseUrlPaths[7081]);
+  for (const path of paths) {
+    await page.goto("https://www.pga.com" + path);
 
-  // for (const path of paths) {
-  //   await page.goto("https://www.pga.com" + path);
-  //   const pgaProfessionalTitle = await page.evaluate(() => {
-  //     return document.querySelector("h5") !== null
-  //       ? document.querySelector("h5").innerHTML
-  //       : null;
-  //   });
+    const courseData = await page.evaluate(() => {
+      const courseName = document.querySelector(
+        "#__next > div > div > div > div > div > div > div > h4"
+      ).textContent;
+
+      const courseLocation = document.querySelector(
+        "#__next > div > div > div > div > div > div > div > div > div > a"
+      ).textContent;
+
+      const coursePhoneNumber = Array.from(
+        document.querySelectorAll(
+          "#__next > div > div > div > div > div > div > div > div > div > a"
+        )
+      ).map((x) => {
+        return x.textContent;
+      })[1];
+
+      const pgaProfessionals = Array.from(
+        document.querySelectorAll(
+          "#__next > div > div > div > div > div > div > div > div > a > div > div > h6"
+        )
+      ).map((x) => {
+        return {
+          name: x.textContent,
+          title: x.nextElementSibling.textContent,
+        };
+      });
+
+      return {
+        courseName,
+        courseLocation,
+        coursePhoneNumber: coursePhoneNumber ? coursePhoneNumber : "N/A",
+        pgaProfessionals,
+      };
+    });
+
+    const { courseName, courseLocation, coursePhoneNumber, pgaProfessionals } =
+      courseData;
+
+    let csvString = `${courseName},${courseLocation},${coursePhoneNumber}`;
+
+    let proString = "";
+    if (pgaProfessionals.length > 0) {
+      i = 0;
+      for (const professional of pgaProfessionals) {
+        if (i === pgaProfessionals.length - 1) {
+          proString += `${professional.name},${professional.title}`;
+        } else {
+          proString += `${professional.name},${professional.title}#`;
+        }
+        i++;
+      }
+      csvString += `,${proString}`;
+    }
+
+    await fs.appendFile("GolfCourseData.txt", `${csvString}\r\n`);
+  }
 
   //   if (pgaProfessionalTitle === "PGA Professionals") {
   //     await fs.appendFile(
@@ -129,19 +180,19 @@ async function start() {
 
   // paths = golfCoursesWithPgaProfessionalsUrlPaths.slice(3249);
   // console.log();
-  await page.goto("https://directory.pga.org/member/detail/152078714");
+  // await page.goto("https://directory.pga.org/member/detail/152078714");
 
-  const contactInfo = await page.evaluate(() => {
-    return Array.from(
-      document.querySelectorAll(
-        "#__next > div > div > div > div > div > ul > li > a"
-      )
-    ).map((x) => {
-      return x.getAttribute("href");
-    });
-  });
+  // const contactInfo = await page.evaluate(() => {
+  //   return Array.from(
+  //     document.querySelectorAll(
+  //       "#__next > div > div > div > div > div > ul > li > a"
+  //     )
+  //   ).map((x) => {
+  //     return x.getAttribute("href");
+  //   });
+  // });
 
-  console.log(contactInfo);
+  // console.log(contactInfo);
 
   await browser.close();
 }
