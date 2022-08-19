@@ -129,16 +129,10 @@ async function start() {
 
   // paths = golfCoursesWithPgaProfessionalsUrlPaths.slice(3249);
   // console.log();
-  await page.goto("https://directory.pga.org/member/detail/152078714");
+  await page.goto("https://directory.pga.org/member/detail/689184262");
 
   const contactInfo = await page.evaluate(() => {
-    return Array.from(
-      document.querySelectorAll(
-        "#__next > div > div > div > div > div > ul > li > a"
-      )
-    ).map((x) => {
-      return x.getAttribute("href");
-    });
+    return document.querySelector("h1").textContent;
   });
 
   console.log(contactInfo);
